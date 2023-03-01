@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+
 public class EnemyController : MonoBehaviour
 {
     //ゾンビオブジェクトの読み込むもの
@@ -13,7 +14,7 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     public Collider attackCollider;
 
-    private int hp;
+    public int hp;
     bool isDeath;    
     public GameObject target; //プレイヤーオブジェクトを読み込む
 
@@ -23,10 +24,6 @@ public class EnemyController : MonoBehaviour
 
     private UiController _ui;
     private ParameterController parameter;
-
-    private Image _hpBarcurrent;
-    private float currentHealth;
-
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +39,6 @@ public class EnemyController : MonoBehaviour
         enemyAttackInterval = Random.Range(5.0f, 10.0f - parameter.enemyAttackInterval); 
         intervalTime = Random.Range(0.0f + parameter.enemyAttackInterval, 5.0f);       
         hp = parameter.enemyHP;
-
-        _hpBarcurrent = this.transform.Find("HP").transform.Find("enemyHPBarCurrent").gameObject.GetComponent<Image>();
-        currentHealth = parameter.enemyHP;
 
         attackCollider.enabled = false;
     }
@@ -84,8 +78,10 @@ public class EnemyController : MonoBehaviour
 
         //移動の処理
         float dis = Vector3.Distance(this.transform.position, target.transform.position); //キャラクターとの距離
-        if(dis < 1.5) //距離が範囲内になったら
+
+        if(dis < 1.5) 
         {
+            //距離が範囲内になったら攻撃する準備
             intervalTime += Time.deltaTime;
             if(intervalTime >= enemyAttackInterval)
             {
@@ -99,9 +95,6 @@ public class EnemyController : MonoBehaviour
         {
             checkMove(dis);
         }
-
-        currentHealth = Mathf.Clamp(hp, 0, parameter.enemyHP);
-        _hpBarcurrent.fillAmount = currentHealth / parameter.enemyHP; //現在のhp÷MAXHP
 
     }
 
@@ -128,9 +121,7 @@ public class EnemyController : MonoBehaviour
 
     private void ItemDrop()
     {
-        int random = Random.Range(1, 10);
-        // 1は回復アイテム
-        // 2は攻撃アイテム enumで整理？
+        int random = Random.Range(1, 20);
         if(random == 1)
         {
             //DropHeal

@@ -58,3 +58,9 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+#Project ignore directory
+Assets/Rocks and Boulders 2
+Assets/RPG_FPS_game_assets_industrial
+Assets/RPGHero
+Assets/Zombie
+Assets/SAColliderBuilder
