@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour
 
     private int hp;
     bool isDeath;    
-    public GameObject target;
+    public GameObject target; //プレイヤーオブジェクトを読み込む
 
    
     float enemyAttackInterval;
@@ -26,6 +26,7 @@ public class EnemyController : MonoBehaviour
 
     private Image _hpBarcurrent;
     private float currentHealth;
+
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +70,7 @@ public class EnemyController : MonoBehaviour
             animator.SetTrigger("Gethit");
             _ui.KOcount += 1;
             Destroy(gameObject, 3f);     //倒れた時に消滅
+            ItemDrop();
         }
     }
     // Update is called once per frame
@@ -122,6 +124,29 @@ public class EnemyController : MonoBehaviour
             animator.SetTrigger("outRange");
             agent.updatePosition = true;
         }
+    }
+
+    private void ItemDrop()
+    {
+        int random = Random.Range(1, 10);
+        // 1は回復アイテム
+        // 2は攻撃アイテム enumで整理？
+        if(random == 1)
+        {
+            //DropHeal
+            GameObject obj = (GameObject)Resources.Load("Item_Heal");
+            GameObject instance = (GameObject)Instantiate(obj, this.transform.position, Quaternion.identity);
+        }else if(random == 2)
+        {
+            //DropAttack
+            GameObject obj = (GameObject)Resources.Load("Item_Attack");
+            GameObject instance = (GameObject)Instantiate(obj, this.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            return;
+        }
+        return;
     }
 
     public void OffColliderAttack()

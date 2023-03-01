@@ -20,12 +20,11 @@ public class PlayerController : MonoBehaviour
 
     private ParameterController parameter;
 
-
+    private float bufftime;
 
     // Start is called before the first frame update
     void Start()
     {
-        attackCollider.enabled = false;
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
         parameter = GameObject.Find("ParameterSystem").GetComponent<ParameterController>();
@@ -33,20 +32,35 @@ public class PlayerController : MonoBehaviour
         hp = parameter.playerHP;
         Speed = parameter.playerSpeed;
         isDeath = false;
+        attackCollider.enabled = false;
     }
 
     private void OnTriggerEnter(Collider other) //Õ“Ë‚Ìˆ—
     {
-        if (!isDeath)
+        //Õ“Ë‚µ‚½•¨‘Ì‚É‚æ‚Á‚Äê‡•ª‚¯
+        switch (other.gameObject.tag)
         {
-            DamageController damager = other.GetComponent<DamageController>();
-            if (damager != null)
-            {
-                animator.SetTrigger("Gethit");
-                Damage();
-            }
+            case "Item_Heal":
+                hp += 30;
+                if (hp > parameter.playerHP) hp = 100;
+                break;
+            case "Item_Attack":
+                bufftime = Time.time;
+                parameter.playerAttackPower = 60;
+                break;
+            default:
+                if (!isDeath)
+                {
+                    DamageController damager = other.GetComponent<DamageController>();
+                    if (damager != null)
+                    {
+                        animator.SetTrigger("Gethit");
+                        Damage();
+                    }
+                }
+                break;
+            }    
         }
-    }
 
     void Damage()
     {
@@ -56,7 +70,6 @@ public class PlayerController : MonoBehaviour
             isDeath = true; //€–S‚µ‚Ä‚¢‚éƒtƒ‰ƒO‚ğ‹N“®
             animator.SetTrigger("Death");
             rb.velocity = Vector3.zero; //rigidbody‚Ì’â~
-            animator.SetTrigger("Death");
             StartCoroutine(GameOver());
         }
     }
@@ -86,6 +99,11 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetTrigger("Attack");
             }
+        }
+
+        if(Time.time - bufftime > 5)
+        {
+            parameter.playerAttackPower = 30;
         }
     }
 

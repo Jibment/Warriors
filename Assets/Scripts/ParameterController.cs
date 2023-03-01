@@ -17,6 +17,33 @@ public class ParameterController : MonoBehaviour
     //ñ⁄ïWåÇîjêî
     public int maxKOcount = 50;
 
+    public void SetParameterEasy()
+    {
+        playerHP = 100;
+        playerAttackPower = 30;
+        enemyHP = 20;
+        enemyAttackPower = 20;
+        enemyAttackInterval = 0f;
+    }
+
+    public void SetParameterNormal()
+    {
+        playerHP = 80;
+        playerAttackPower = 30;
+        enemyHP = 50;
+        enemyAttackPower = 20;
+        enemyAttackInterval = 1f;
+    }
+
+    public void SetParameterHard()
+    {
+        playerHP = 50;
+        playerAttackPower = 30;
+        enemyHP = 100;
+        enemyAttackPower = 20;
+        enemyAttackInterval = 2f;
+    }
+
     void Start()
     {
         DontDestroyOnLoad(this);
