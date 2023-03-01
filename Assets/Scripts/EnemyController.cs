@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+
 public class EnemyController : MonoBehaviour
 {
     //ゾンビオブジェクトの読み込むもの
@@ -13,9 +14,9 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     public Collider attackCollider;
 
-    private int hp;
+    public int hp;
     bool isDeath;    
-    public GameObject target;
+    public GameObject target; //プレイヤーオブジェクトを読み込む
 
    
     float enemyAttackInterval;
@@ -23,9 +24,6 @@ public class EnemyController : MonoBehaviour
 
     private UiController _ui;
     private ParameterController parameter;
-
-    private Image _hpBarcurrent;
-    private float currentHealth;
 
     // Start is called before the first frame update
     void Start()
@@ -41,9 +39,6 @@ public class EnemyController : MonoBehaviour
         enemyAttackInterval = Random.Range(5.0f, 10.0f - parameter.enemyAttackInterval); 
         intervalTime = Random.Range(0.0f + parameter.enemyAttackInterval, 5.0f);       
         hp = parameter.enemyHP;
-
-        _hpBarcurrent = this.transform.Find("HP").transform.Find("enemyHPBarCurrent").gameObject.GetComponent<Image>();
-        currentHealth = parameter.enemyHP;
 
         attackCollider.enabled = false;
     }
@@ -69,6 +64,7 @@ public class EnemyController : MonoBehaviour
             animator.SetTrigger("Gethit");
             _ui.KOcount += 1;
             Destroy(gameObject, 3f);     //倒れた時に消滅
+            ItemDrop();
         }
     }
     // Update is called once per frame
@@ -82,8 +78,10 @@ public class EnemyController : MonoBehaviour
 
         //移動の処理
         float dis = Vector3.Distance(this.transform.position, target.transform.position); //キャラクターとの距離
-        if(dis < 1.5) //距離が範囲内になったら
+
+        if(dis < 1.5) 
         {
+            //距離が範囲内になったら攻撃する準備
             intervalTime += Time.deltaTime;
             if(intervalTime >= enemyAttackInterval)
             {
@@ -97,9 +95,6 @@ public class EnemyController : MonoBehaviour
         {
             checkMove(dis);
         }
-
-        currentHealth = Mathf.Clamp(hp, 0, parameter.enemyHP);
-        _hpBarcurrent.fillAmount = currentHealth / parameter.enemyHP; //現在のhp÷MAXHP
 
     }
 
@@ -122,6 +117,27 @@ public class EnemyController : MonoBehaviour
             animator.SetTrigger("outRange");
             agent.updatePosition = true;
         }
+    }
+
+    private void ItemDrop()
+    {
+        int random = Random.Range(1, 20);
+        if(random == 1)
+        {
+            //DropHeal
+            GameObject obj = (GameObject)Resources.Load("Item_Heal");
+            GameObject instance = (GameObject)Instantiate(obj, this.transform.position, Quaternion.identity);
+        }else if(random == 2)
+        {
+            //DropAttack
+            GameObject obj = (GameObject)Resources.Load("Item_Attack");
+            GameObject instance = (GameObject)Instantiate(obj, this.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            return;
+        }
+        return;
     }
 
     public void OffColliderAttack()

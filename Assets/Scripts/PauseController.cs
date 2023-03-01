@@ -36,6 +36,7 @@ public class PauseController : MonoBehaviour
 
     public void ContinueGame()
     {
-
+        Time.timeScale = 1f;
+        _PauseUI.SetActive(false); //時間を動かしボタンを非アクティブ
     }
 }

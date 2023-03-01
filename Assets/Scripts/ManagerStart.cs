@@ -9,7 +9,8 @@ public class ManagerStart : MonoBehaviour
     private ParameterController parameter;
     private GameObject[] GuideObjects;
     // Start is called before the first frame update
-    
+
+
     void Start()
     {
         parameter = GameObject.Find("ParameterSystem").GetComponent<ParameterController>();
@@ -18,29 +19,19 @@ public class ManagerStart : MonoBehaviour
     /*ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—*/
     public void EasyGame()
     {       
-        parameter.playerHP = 100;
-        parameter.playerAttackPower = 30;
-        parameter.enemyHP = 20;
-        parameter.enemyAttackPower = 20;
-        parameter.enemyAttackInterval = 0f;
+        parameter.SetParameterEasy();
         SceneManager.LoadScene("Main");
     }
 
     public void NormalGame()
     {
-        parameter.playerHP = 80;
-        parameter.playerAttackPower = 30;
-        parameter.enemyHP = 50;
-        parameter.enemyAttackPower = 20;
+        parameter.SetParameterNormal();
         SceneManager.LoadScene("Main");
     }
 
     public void HardGame()
     {
-        parameter.playerHP = 50;
-        parameter.playerAttackPower = 30;
-        parameter.enemyHP = 100;
-        parameter.enemyAttackPower = 20;
+        parameter.SetParameterHard();
         SceneManager.LoadScene("Main");
     }
 
